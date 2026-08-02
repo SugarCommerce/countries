@@ -24,13 +24,13 @@ PHP 8.5+
 ## Installation
 
 ```bash
-composer require sugarmill/countries
+composer require sugarcommerce/countries
 ```
 
 ## Usage
 
 ```php
-use SugarMill\Countries\Country;
+use Sugar\Countries\Country;
 
 Country::name( 'DE' );          // 'Germany'
 Country::code( 'Germany' );     // 'DE'

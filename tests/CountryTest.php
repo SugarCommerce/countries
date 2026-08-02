@@ -2,7 +2,7 @@
 /**
  * Country test suite.
  *
- * @package   SugarMill\Countries
+ * @package   Sugar\Countries
  * @copyright Copyright (c) 2026, ArrayPress Limited
  * @license   GPL-2.0-or-later
  * @since     1.0.0
@@ -10,11 +10,11 @@
 
 declare( strict_types=1 );
 
-namespace SugarMill\Countries\Tests;
+namespace Sugar\Countries\Tests;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use SugarMill\Countries\Country;
+use Sugar\Countries\Country;
 
 final class CountryTest extends TestCase {
 
