@@ -30,7 +30,7 @@ composer require sugarcommerce/countries
 ## Usage
 
 ```php
-use Sugar\Countries\Country;
+use SugarCommerce\Countries\Country;
 
 Country::name( 'DE' );          // 'Germany'
 Country::code( 'Germany' );     // 'DE'
