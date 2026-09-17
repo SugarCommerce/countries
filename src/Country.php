@@ -189,6 +189,59 @@ final readonly class Country {
 	);
 
 	/**
+	 * ISO 3166-1 alpha-2 code => ISO 4217 currency.
+	 *
+	 * Only the countries with a currency of their own worth naming. The rest
+	 * fall out of currency() as null, which a caller should read as "use your
+	 * default" rather than as an error — a shop with no price in somebody's
+	 * currency is not a broken shop.
+	 *
+	 * The euro area is deliberately absent: is_eu() already knows who is in
+	 * it, and repeating twenty countries here is twenty chances to disagree
+	 * with it.
+	 */
+	private const CURRENCIES = array(
+		'AE' => 'AED', 'AR' => 'ARS', 'AU' => 'AUD', 'BD' => 'BDT', 'BG' => 'BGN',
+		'BH' => 'BHD', 'BR' => 'BRL', 'CA' => 'CAD', 'CH' => 'CHF', 'CL' => 'CLP',
+		'CN' => 'CNY', 'CO' => 'COP', 'CZ' => 'CZK', 'DK' => 'DKK', 'EG' => 'EGP',
+		'GB' => 'GBP', 'GH' => 'GHS', 'HK' => 'HKD', 'HU' => 'HUF', 'ID' => 'IDR',
+		'IL' => 'ILS', 'IN' => 'INR', 'IS' => 'ISK', 'JP' => 'JPY', 'KE' => 'KES',
+		'KR' => 'KRW', 'KW' => 'KWD', 'MA' => 'MAD', 'MX' => 'MXN', 'MY' => 'MYR',
+		'NG' => 'NGN', 'NO' => 'NOK', 'NZ' => 'NZD', 'PE' => 'PEN', 'PH' => 'PHP',
+		'PK' => 'PKR', 'PL' => 'PLN', 'QA' => 'QAR', 'RO' => 'RON', 'RS' => 'RSD',
+		'SA' => 'SAR', 'SE' => 'SEK', 'SG' => 'SGD', 'TH' => 'THB', 'TR' => 'TRY',
+		'TW' => 'TWD', 'UA' => 'UAH', 'US' => 'USD', 'UY' => 'UYU', 'VN' => 'VND',
+		'ZA' => 'ZAR',
+	);
+
+	/**
+	 * The currency a country pays in.
+	 *
+	 * For deciding which of several prices to show somebody, not for
+	 * accounting: a visitor in Ireland is quoted in euro because that is what
+	 * they spend, and nothing here converts anything.
+	 *
+	 * Null for a country with no obvious answer, which a caller should read
+	 * as "use your default".
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param string $code ISO 3166-1 alpha-2 code.
+	 *
+	 * @return string|null ISO 4217 code, or null.
+	 */
+	public static function currency( string $code ): ?string {
+		$code = strtoupper( trim( $code ) );
+
+		if ( isset( self::CURRENCIES[ $code ] ) ) {
+			return self::CURRENCIES[ $code ];
+		}
+
+		// The euro area, from the one list that already knows who is in it.
+		return self::is_eu( $code ) ? 'EUR' : null;
+	}
+
+	/**
 	 * Every country, code => name, sorted by name.
 	 *
 	 * @since 1.0.0
