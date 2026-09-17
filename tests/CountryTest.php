@@ -18,6 +18,37 @@ use SugarCommerce\Countries\Country;
 
 final class CountryTest extends TestCase {
 
+	/* ── what a country pays in ──────────────────────────────────────── */
+
+	public function test_a_country_with_its_own_currency(): void {
+		$this->assertSame( 'GBP', Country::currency( 'GB' ) );
+		$this->assertSame( 'USD', Country::currency( 'US' ) );
+		$this->assertSame( 'JPY', Country::currency( 'JP' ) );
+	}
+
+	/**
+	 * Taken from is_eu() rather than listed again: twenty countries repeated
+	 * is twenty chances to disagree with the list that already knows.
+	 */
+	public function test_the_euro_area_comes_from_the_eu_list(): void {
+		$this->assertSame( 'EUR', Country::currency( 'DE' ) );
+		$this->assertSame( 'EUR', Country::currency( 'IE' ) );
+	}
+
+	public function test_a_code_is_case_insensitive_and_trimmed(): void {
+		$this->assertSame( 'AUD', Country::currency( ' au ' ) );
+	}
+
+	/**
+	 * Null means "use your default", not "error". A shop with no price in
+	 * somebody's currency is not a broken shop.
+	 */
+	public function test_a_country_with_no_obvious_answer_is_null(): void {
+		$this->assertNull( Country::currency( 'AQ' ) );
+		$this->assertNull( Country::currency( 'nonsense' ) );
+		$this->assertNull( Country::currency( '' ) );
+	}
+
 	public function test_the_full_list_is_present(): void {
 		$this->assertCount( 250, Country::all() );
 		$this->assertCount( 250, Country::codes() );
