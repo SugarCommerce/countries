@@ -29,7 +29,7 @@ final readonly class Country {
 	/**
 	 * ISO 3166-1 alpha-2 code => English short name.
 	 */
-	private const COUNTRIES = array(
+	private const array COUNTRIES = array(
 		'AF' => 'Afghanistan', 'AX' => 'Åland Islands', 'AL' => 'Albania',
 		'DZ' => 'Algeria', 'AS' => 'American Samoa', 'AD' => 'Andorra',
 		'AO' => 'Angola', 'AI' => 'Anguilla', 'AQ' => 'Antarctica',
@@ -122,7 +122,7 @@ final readonly class Country {
 	 * The list that decides whether VAT rules apply, so it matters that
 	 * GB is absent and the outermost regions are handled deliberately.
 	 */
-	private const EU = array(
+	private const array EU = array(
 		'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR',
 		'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK',
 		'SI', 'ES', 'SE',
@@ -134,7 +134,7 @@ final readonly class Country {
 	 * A signal to weigh, never a reason to block on its own — plenty of
 	 * legitimate customers live in every one of them.
 	 */
-	private const HIGH_RISK = array(
+	private const array HIGH_RISK = array(
 		'BY', 'BD', 'BR', 'CN', 'CO', 'EG', 'GH', 'ID', 'IN', 'MX', 'MY', 'NG',
 		'PH', 'PK', 'RO', 'RU', 'TH', 'UA', 'VE', 'VN',
 	);
@@ -146,7 +146,7 @@ final readonly class Country {
 	 * jurisdiction; if you are relying on this for compliance, verify it
 	 * against your own legal advice rather than a constant in a library.
 	 */
-	private const SANCTIONED = array(
+	private const array SANCTIONED = array(
 		'CU', 'IR', 'KP', 'RU', 'SY', 'VE',
 	);
 
@@ -157,7 +157,7 @@ final readonly class Country {
 	 * Ireland" into a form. Keyed lowercase; the lookup lowercases the
 	 * needle rather than the table.
 	 */
-	private const ALIASES = array(
+	private const array ALIASES = array(
 		'usa'                      => 'US',
 		'u.s.a.'                   => 'US',
 		'u.s.'                     => 'US',
@@ -200,7 +200,7 @@ final readonly class Country {
 	 * it, and repeating twenty countries here is twenty chances to disagree
 	 * with it.
 	 */
-	private const CURRENCIES = array(
+	private const array CURRENCIES = array(
 		'AE' => 'AED', 'AR' => 'ARS', 'AU' => 'AUD', 'BD' => 'BDT', 'BG' => 'BGN',
 		'BH' => 'BHD', 'BR' => 'BRL', 'CA' => 'CAD', 'CH' => 'CHF', 'CL' => 'CLP',
 		'CN' => 'CNY', 'CO' => 'COP', 'CZ' => 'CZK', 'DK' => 'DKK', 'EG' => 'EGP',
