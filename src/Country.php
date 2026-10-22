@@ -198,10 +198,10 @@ final readonly class Country {
 	 *
 	 * The euro area is deliberately absent: is_eu() already knows who is in
 	 * it, and repeating twenty countries here is twenty chances to disagree
-	 * with it.
+	 * with it. Bulgaria has paid in euro since 1 January 2026.
 	 */
 	private const array CURRENCIES = array(
-		'AE' => 'AED', 'AR' => 'ARS', 'AU' => 'AUD', 'BD' => 'BDT', 'BG' => 'BGN',
+		'AE' => 'AED', 'AR' => 'ARS', 'AU' => 'AUD', 'BD' => 'BDT',
 		'BH' => 'BHD', 'BR' => 'BRL', 'CA' => 'CAD', 'CH' => 'CHF', 'CL' => 'CLP',
 		'CN' => 'CNY', 'CO' => 'COP', 'CZ' => 'CZK', 'DK' => 'DKK', 'EG' => 'EGP',
 		'GB' => 'GBP', 'GH' => 'GHS', 'HK' => 'HKD', 'HU' => 'HUF', 'ID' => 'IDR',
@@ -260,7 +260,7 @@ final readonly class Country {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return string[]
+	 * @return list<string>
 	 */
 	public static function codes(): array {
 		return array_keys( self::COUNTRIES );
@@ -282,8 +282,9 @@ final readonly class Country {
 	/**
 	 * The code for a name.
 	 *
-	 * Case-insensitive, and tolerant of the common alternatives — "USA",
-	 * "UK", "Holland" and similar all resolve.
+	 * Case-insensitive, accented letters included ("åland islands"), and
+	 * tolerant of the common alternatives — "USA", "UK", "Holland" and
+	 * similar all resolve.
 	 *
 	 * @since 1.0.0
 	 *
@@ -292,14 +293,14 @@ final readonly class Country {
 	 * @return string|null Null when unrecognised.
 	 */
 	public static function code( string $name ): ?string {
-		$needle = strtolower( trim( $name ) );
+		$needle = mb_strtolower( trim( $name ), 'UTF-8' );
 
 		if ( isset( self::ALIASES[ $needle ] ) ) {
 			return self::ALIASES[ $needle ];
 		}
 
 		foreach ( self::COUNTRIES as $code => $country ) {
-			if ( strtolower( $country ) === $needle ) {
+			if ( mb_strtolower( $country, 'UTF-8' ) === $needle ) {
 				return $code;
 			}
 		}
@@ -371,7 +372,8 @@ final readonly class Country {
 	 * @return array<string, string> Matching code => name.
 	 */
 	public static function search( string $query, int $limit = 0 ): array {
-		$query = strtolower( trim( $query ) );
+		// Multibyte-aware, or "åland" never finds "Åland Islands".
+		$query = mb_strtolower( trim( $query ), 'UTF-8' );
 
 		if ( '' === $query ) {
 			return array();
@@ -380,7 +382,7 @@ final readonly class Country {
 		$results = array();
 
 		foreach ( self::all() as $code => $name ) {
-			if ( str_contains( strtolower( $name ), $query ) ) {
+			if ( str_contains( mb_strtolower( $name, 'UTF-8' ), $query ) ) {
 				$results[ $code ] = $name;
 
 				if ( $limit > 0 && count( $results ) >= $limit ) {

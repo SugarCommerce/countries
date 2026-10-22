@@ -175,4 +175,23 @@ final class CountryTest extends TestCase {
 		$this->assertFalse( Country::is_high_risk( 'ZZ' ) );
 		$this->assertFalse( Country::is_sanctioned( 'ZZ' ) );
 	}
+
+	/**
+	 * strtolower() leaves multibyte letters alone, so a name typed in
+	 * lower case never matched one that starts with Å.
+	 */
+	public function test_accented_names_match_in_any_case(): void {
+		$this->assertSame( 'AX', Country::code( 'åland islands' ) );
+		$this->assertSame( 'AX', Country::code( 'ÅLAND ISLANDS' ) );
+		$this->assertArrayHasKey( 'AX', Country::search( 'åland' ) );
+		$this->assertArrayHasKey( 'ST', Country::search( 'SÃO TOMÉ' ) );
+	}
+
+	/**
+	 * Bulgaria joined the euro area on 1 January 2026.
+	 */
+	public function test_bulgaria_pays_in_euro(): void {
+		$this->assertSame( 'EUR', Country::currency( 'BG' ) );
+		$this->assertSame( 'CZK', Country::currency( 'cz' ) );
+	}
 }
