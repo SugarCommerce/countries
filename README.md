@@ -37,7 +37,12 @@ Country::code( 'Germany' );     // 'DE'
 Country::flag( 'DE' );          // 🇩🇪
 Country::exists( 'ZZ' );        // false
 Country::sanitize( ' de ' );    // 'DE', or null if not a country
+
+Country::sanitize_list( array( ' ie', 'gb', 'ZZ', 'GB' ) );  // ['GB', 'IE']
+Country::sanitize_list( 'us, gb ie' );                      // ['GB', 'IE', 'US']
 ```
+
+`sanitize_list()` is for a stored or submitted set of countries — excluded, shipped to, taxed. It takes an array or a comma- or space-separated string, drops anything that is not a known code, and returns each code once, sorted, so saving the same set twice stores the same list.
 
 ### Building a picker
 
@@ -81,7 +86,7 @@ composer install
 composer test
 ```
 
-26 tests, 321 assertions — including that every code maps to a name and back, every flag renders as two regional indicators, and the EU list holds exactly 27 members.
+35 tests, 343 assertions — including that a list of codes comes back cleaned, unique and sorted, that every code maps to a name and back, every flag renders as two regional indicators, and the EU list holds exactly 27 members.
 
 ## License
 

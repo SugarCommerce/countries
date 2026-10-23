@@ -337,6 +337,49 @@ final readonly class Country {
 	}
 
 	/**
+	 * Validate and normalise a list of codes.
+	 *
+	 * For a stored or submitted set — countries a seller excludes, ships
+	 * to, charges VAT in. Each entry is trimmed and uppercased, anything
+	 * that is not a known code is dropped, duplicates go, and the rest is
+	 * sorted: so two saves of the same set produce the same list, and a
+	 * diff of stored settings means a real change rather than a reorder.
+	 *
+	 * Takes an array or a string separated by commas or whitespace, because
+	 * a hand-typed field and most APIs send the second. Anything else — a
+	 * number, null, a nested array — contributes nothing.
+	 *
+	 * @since 1.3.0
+	 *
+	 * @param mixed $codes list<string>, or "GB, ie de".
+	 *
+	 * @return list<string> Uppercase codes, unique, in alphabetical order.
+	 */
+	public static function sanitize_list( mixed $codes ): array {
+		if ( is_string( $codes ) ) {
+			$codes = preg_split( '/[\s,]+/', $codes, -1, PREG_SPLIT_NO_EMPTY ) ?: array();
+		}
+
+		if ( ! is_array( $codes ) ) {
+			return array();
+		}
+
+		$clean = array();
+
+		foreach ( $codes as $code ) {
+			$code = is_string( $code ) ? self::sanitize( $code ) : null;
+
+			if ( null !== $code ) {
+				$clean[ $code ] = true;
+			}
+		}
+
+		ksort( $clean, SORT_STRING );
+
+		return array_map( strval( ... ), array_keys( $clean ) );
+	}
+
+	/**
 	 * The emoji flag for a code.
 	 *
 	 * Built from regional indicator symbols, so it needs no image assets

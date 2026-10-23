@@ -105,6 +105,22 @@ final class CountryTest extends TestCase {
 		$this->assertNull( Country::sanitize( 'ZZ' ) );
 	}
 
+	public function test_a_list_is_trimmed_validated_unique_and_sorted(): void {
+		$this->assertSame( array( 'DE', 'GB', 'IE' ), Country::sanitize_list( array( ' ie', 'gb', 'ZZ', 'GB ', 'de', '' ) ) );
+		$this->assertSame( array( 'GB', 'IE', 'US' ), Country::sanitize_list( "us, gb\nie,,ie" ) );
+	}
+
+	public function test_a_list_ignores_what_is_not_a_code(): void {
+		$this->assertSame( array( 'FR' ), Country::sanitize_list( array( 44, null, array( 'GB' ), true, 'fr', 'France' ) ) );
+		$this->assertSame( array(), Country::sanitize_list( null ) );
+		$this->assertSame( array(), Country::sanitize_list( 826 ) );
+		$this->assertSame( array(), Country::sanitize_list( '  ' ) );
+	}
+
+	public function test_a_list_is_a_list_whatever_the_keys(): void {
+		$this->assertSame( array( 'GB', 'NO' ), Country::sanitize_list( array( 'x' => 'no', 7 => 'gb' ) ) );
+	}
+
 	public function test_flags_are_regional_indicator_pairs(): void {
 		$this->assertSame( '🇬🇧', Country::flag( 'GB' ) );
 		$this->assertSame( '🇯🇵', Country::flag( 'jp' ) );
